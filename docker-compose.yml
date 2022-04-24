@@ -1,0 +1,52 @@
+version: "2.1"
+services:
+  grav:
+    image: lscr.io/linuxserver/grav
+    container_name: grav
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./grav/config:/config
+      - ./data/grav/user:/config/www/user
+      - ./data/grav/backup:/config/www/backup
+      - ./data/grav/logs:/config/www/logs
+    ports:
+      - 3579:80
+    restart: unless-stopped
+  swag:
+    image: ghcr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - URL=qgdev.co.uk
+      - SUBDOMAINS=www,gitea
+      - VALIDATION=http
+      - EMAIL=qg@qgdev.co.uk
+    volumes:
+      - ./swag/config:/config
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped
+  gitea:
+    image: strobi/rpi-gitea:latest
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    volumes:
+      - ./data/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+    
+  
