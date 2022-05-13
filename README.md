@@ -48,8 +48,11 @@ This overwrites the default config for SWAG and sets the Grav directory as the r
 
 - Confirm settings for email and domain name in `docker-compose.yml`
 - Confirm that image of `gitea` in `docker-compose.yml` is for the desired architecture
+- Within the `swag` config, set the URL and the email variables.
 - Initialise containers with `docker-compose up -d`
+- Once up, modify `docker-compose.yml` with a Plex claim from www.plex.tv/claim, and run `docker-compose up -d` again.
 
 
 # Common issues
 - If you are using Cloudflare or another proxying service as part of your DNS, the proxy will need to be disabled for initial setup, otherwise SWAG will fail to get security certificates
+- Be aware that Plex servers can take up a LOT of room. In my server, `data/plex` is a mounted 4tb drive.
