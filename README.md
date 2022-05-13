@@ -2,7 +2,7 @@
 
 This is the stack I use to run my environment on Docker, hosted on a Raspberry Pi 4.
 
-Provides a Grav CMS webpage at the root of your domain, as well as `gitea.yourdomain.io` as a self-hosted git repository.
+Provides a Grav CMS webpage at the root of your domain, as well as `gitea.yourdomain.io` as a self-hosted git repository, and `plex.yourdomain.io` for a self hosted media server.
 
 
 # Configuring `docker-compose.yml`
