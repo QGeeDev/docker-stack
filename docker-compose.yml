@@ -8,10 +8,7 @@ services:
       - PGID=1000
       - TZ=Europe/London
     volumes:
-      - ./grav/config:/config
-      - ./data/grav/user:/config/www/user
-      - ./data/grav/backup:/config/www/backup
-      - ./data/grav/logs:/config/www/logs
+      - ./data/grav/config:/config
     ports:
       - 3579:80
     restart: unless-stopped
@@ -24,24 +21,46 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
-      - URL= # INSERT YOUR DOMAIN NAME HERE
-      - SUBDOMAINS=www,gitea
+      - URL= # Insert web url here
+      - SUBDOMAINS=www,gitea,plex
       - VALIDATION=http
-      - EMAIL= # INSERT YOUR EMAIL HERE
+      - EMAIL= # Insert email here
     volumes:
-      - .data/swag/config:/config
+      - ./data/swag/config:/config
     ports:
       - 443:443
       - 80:80
     restart: unless-stopped
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - PUID=1000 # user account id on the system
+      - PGID=1000 # group id on the system
+      - TZ=Europe/London
+      - UMASK_SET=022
+      - VERSION=docker
+      - PLEX_CLAIM= # from plex.tv/claim, use to enable Plex Media server
+    ports:
+      - "32400:32400" # (for access to the Plex Media Server) [required]
+      - "32410:32410/udp"
+      - "32412:32412/udp"
+      - "32413:32413/udp"
+      - "32414:32414/udp"
+    volumes:
+      - ./data/plex/config:/config
+      - ./data/plex/transcode:/transcode
+      - ./data/plex/media/Movies:/Movies
+      - ./data/plex/media/Television:/Television
   gitea:
     image: strobi/rpi-gitea:latest
-    # image: gitea/gitea:latest # Use this image for x64 systems
     container_name: gitea
     environment:
       - USER_UID=1000
       - USER_GID=1000
-    restart: unless-stopped
+    restart: always
     volumes:
       - ./data/gitea:/data
       - /etc/timezone:/etc/timezone:ro
